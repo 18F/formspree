@@ -1,0 +1,8 @@
+FROM node:8.11.1
+
+RUN apt-get update && apt-get install -y entr python3
+
+WORKDIR /formspree
+COPY package.json .
+
+RUN npm install

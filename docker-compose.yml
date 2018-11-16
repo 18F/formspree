@@ -1,0 +1,51 @@
+version: '2'
+services:
+  app:
+    build: .
+    volumes:
+      - ./:/formspree
+    links:
+      - db
+      - redis
+    working_dir: /formspree
+    environment:
+      - PYTHONUNBUFFERED=yup
+      - DATABASE_URL=postgresql://formspree_user@db/formspree
+      - API_ROOT=http://127.0.0.1:5000
+      - CONTACT_EMAIL=support@example.com
+      - DEBUG=True
+      - FLASK_ENV=development
+      - DEFAULT_SENDER=no-reply@localhost.com
+      - LOG_LEVEL=debug
+      - MONTHLY_SUBMISSIONS_LIMIT=100
+      - NONCE_SECRET=y0ur_n0nc3_s3cr3t
+      - HASHIDS_SALT=a salt
+      - REDISTOGO_URL=redis://redis:6379
+      - SECRET_KEY=y0ur_s3cr3t_k3y
+      - SENDGRID_PASSWORD=<password>
+      - SENDGRID_USERNAME=<username>
+      - SERVICE_NAME=LocalFormspree
+      - SERVICE_URL=http://127.0.0.1:5000
+      - FLASK_APP=formspree/manage.py
+    stdin_open: true
+    tty: true
+    ports:
+      - "5000:5000"
+    command: "flask run --host=0.0.0.0"
+  db:
+    image: postgres:9.6.8
+    environment:
+      - POSTGRES_DB=formspree
+      - POSTGRES_USER=formspree_user
+  redis:
+    image: redis:5.0.1
+  assets:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.assets
+    volumes:
+      - .:/formspree
+      - /formspree/node_modules
+    working_dir: /formspree
+    entrypoint: make
+    tty: true
