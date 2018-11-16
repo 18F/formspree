@@ -79,40 +79,15 @@ Running your own copy of Formspree
 
 ### Running on localhost
 
-You'll need a [SendGrid](https://sendgrid.com/) account, PostgreSQL, Redis and Python 2.7 and should install [pip](https://pip.pypa.io/en/latest/installing.html), and create a [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/) for the server.
+Use [Docker](https://www.docker.com) to get started:
 
-Once your environment is setup, create a postgresql database, clone the source and cd into the root of the Formspree repository. Then run:
+```bash
+docker-compose build
+docker-compose run app flask db upgrade
+docker-compose up
+```
 
-    pip install -r requirements.txt
-
-then create a `.env` file with your configuration like the following:
-
-    API_ROOT='http://127.0.0.1:5000'
-    CONTACT_EMAIL='support@example.com'
-    DATABASE_URL='postgresql://<username>@127.0.0.1:5432/formspree'
-    DEBUG='True'
-    DEFAULT_SENDER='no-reply@localhost.com'
-    LOG_LEVEL='debug'
-    MONTHLY_SUBMISSIONS_LIMIT='100'
-    NONCE_SECRET='y0ur_n0nc3_s3cr3t'
-    HASHIDS_SALT='a salt'
-    REDISTOGO_URL='127.0.0.1:6379'
-    SECRET_KEY='y0ur_s3cr3t_k3y'
-    SENDGRID_PASSWORD='<password>'
-    SENDGRID_USERNAME='<username>'
-    SERVICE_NAME='LocalFormspree'
-    SERVICE_URL='http://127.0.0.1:5000'
-    TEST_DATABASE_URL='postgresql://<username>@127.0.0.1:5432/formspree-test'
-
-Tell the Flask CLI about the application by typing `export FLASK_APP=manage.py` or if using a virtualenv you can [add it to the `activate` script](http://flask.pocoo.org/docs/0.12/cli/#virtualenv-integration)
-
-Make sure you have a postgresql database called `formspree` and create the necessary tables by running:
-
-    flask db upgrade
-
-And you are ready to run the server:
-
-    flask run
+If needed, customize environmental variables in `docker-compose.yml` with your [SendGrid](https://sendgrid.com/) account.
 
 ### Running tests
 

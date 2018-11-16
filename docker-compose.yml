@@ -8,6 +8,7 @@ services:
       - db
       - redis
     working_dir: /formspree
+    entrypoint: wait-for-it db:5432 --
     environment:
       - PYTHONUNBUFFERED=yup
       - DATABASE_URL=postgresql://formspree_user@db/formspree
